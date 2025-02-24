@@ -1,0 +1,40 @@
+[package]
+name = "blackboard-extractor"
+version = "0.1.0"
+edition = "2024"
+repository = "https://github.com/mobetz/blackboard-extractor.git" 
+authors = ["Matthew Obetz <mobetz@gmail.com>"]
+description = "A program that takes a batch download .zip archive from the Blackboard Ultra LMS and produces individual assignment folders."
+
+[package.metadata.wix]
+upgrade-guid = "03198122-10A4-48CF-AF54-E8DC5480704C"
+path-guid = "2B60F9C1-F8B6-464E-9506-85D82605D34E"
+license = false
+eula = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name="blackboard-extractor-cli"
+path="src/cli.rs"
+
+[[bin]]
+name="blackboard-extractor"
+path="src/main.rs"
+
+[dependencies]
+slint = "1.8.0"
+rfd = "0.15.2"
+zip = "2.2.2"
+unrar = "0.5.8"
+clap={version ="4.5.30", features = ["derive"]}
+anyhow="1.0.96"
+regex="1.11.1"
+
+[build-dependencies]
+slint-build = "1.8.0"
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"

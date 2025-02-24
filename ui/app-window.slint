@@ -1,0 +1,81 @@
+import { Button, VerticalBox, LineEdit, HorizontalBox, CheckBox } from "std-widgets.slint";
+
+
+export global FileDialog {
+    callback startBrowseFile([{hint: string, ext: [string]}]) -> string;
+    callback startBrowseFolder() -> string;
+    
+}
+
+component FilePicker {
+    
+    function update_file(path: string) {
+        filepath = path;
+        file_input.text = path;
+    }
+   
+    in property <string> hint;
+    in-out property <[{hint: string, ext: [string]}]> extensions;
+    out property <string> filepath;
+    in property <bool> folder_mode: false;
+
+    HorizontalBox {
+        file_input := LineEdit {
+            edited(text) => { update_file(text); }
+            max-height: 1rem;
+            width: 80rem;
+            placeholder-text <=> hint;
+        }
+        browse_button := Button {
+            text: "Browse...";
+            clicked => {
+                if ( folder_mode ) {
+                    update_file(FileDialog.startBrowseFolder());
+                }
+                else { 
+                    update_file(FileDialog.startBrowseFile(extensions));
+                }
+            }
+        }
+    }
+
+}
+
+export component AppWindow inherits Window {
+    
+    always-on-top: false;
+    
+    out property <string> zip_location <=> zip_picker.filepath;
+    out property <string> dest_location <=> dest_picker.filepath;
+    out property <bool> anonymize <=> anon_check.checked;
+
+    callback submitted <=> execute.clicked;
+
+
+    VerticalBox {
+        spacing: 2rem;
+        padding: 3rem;
+        
+        zip_picker := FilePicker { 
+            hint: "Select the Blackboard .zip...";
+            extensions: [
+                {hint: "Blackboard Zip Archive", ext: ["zip"]}
+            ];
+        }
+
+        dest_picker := FilePicker {
+            folder_mode: true;
+            hint: "Select the destination folder...";
+        }
+        
+        anon_check := CheckBox {
+            text: "Anonymize Students"; 
+        }
+        
+
+        execute := Button {
+            text: "Extract Files";
+        }
+        
+    }
+}
