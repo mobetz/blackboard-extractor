@@ -8,7 +8,7 @@ use regex::Regex;
 
 pub fn iterate_submissions(unzipped_loc: &PathBuf, anonymize: bool) -> Result<(), anyhow::Error> {
 
-    let assign_pattern = Regex::new(r"(?<assignment>.+)_(?<user>\S_\S+)_attempt_(?<timestamp>\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})(?<filename>_.+)e?")?;
+    let assign_pattern = Regex::new(r"(?<assignment>.+)_(?<user>\S_\S+)_attempt_(?<timestamp>\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})(?<filename>_.+)?")?;
 
     for entry in read_dir(unzipped_loc)? {
         let entry = entry?;
